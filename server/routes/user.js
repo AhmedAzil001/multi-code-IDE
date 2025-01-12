@@ -9,6 +9,10 @@ const {
 } = require("../controllers/user.controller");
 const auth = require("../middleware/user.middleware");
 
+userRouter.get("/", (req, res) => {
+  res.render("index", { title: "Express" });
+});
+
 userRouter.post("/signup", signUp);
 userRouter.post("/signin", signIn);
 userRouter.get("/me", auth, getUser);

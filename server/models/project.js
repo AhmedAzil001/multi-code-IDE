@@ -4,8 +4,9 @@ const projectSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
-  projLang: {
+  projLanguage: {
     type: String,
     required: true,
     enum: ["python", "java", "javascript", "cpp", "c", "go", "bash"],
@@ -14,8 +15,8 @@ const projectSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  createdBy: {
-    type: String,
+  creatorId: {
+    type: mongoose.Types.ObjectId,
     required: true,
   },
   date: {
