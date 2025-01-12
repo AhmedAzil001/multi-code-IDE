@@ -12,7 +12,7 @@ const auth = require("../middleware/user.middleware");
 userRouter.post("/signup", signUp);
 userRouter.post("/signin", signIn);
 userRouter.get("/me", auth, getUser);
-userRouter.post("/update", auth, updateUser);
-userRouter.post("/delete", auth, deleteUser);
+userRouter.put("/update", auth, updateUser);
+userRouter.delete("/delete", auth, deleteUser);
 
 module.exports = userRouter;

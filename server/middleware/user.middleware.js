@@ -1,10 +1,9 @@
-const SECRET_KEY = require("../config/config");
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
   try {
     const token = req.headers.token;
-    const { userId } = jwt.verify(token, SECRET_KEY);
+    const { userId } = jwt.verify(token, process.env.SECRET_KEY);
     if (userId) {
         req._id = userId;
         next();
