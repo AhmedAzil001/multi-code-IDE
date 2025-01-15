@@ -2,6 +2,7 @@ import React from "react";
 import java from "../assets/java.svg";
 import cpp from "../assets/cpp.svg";
 import python from "../assets/python.svg";
+import c from "../assets/c.svg";
 
 const Project = ({ img, title, version, date, projLanguage }) => {
   const selectImg = (projLanguage) => {
@@ -11,6 +12,8 @@ const Project = ({ img, title, version, date, projLanguage }) => {
       return <img width={100} src={cpp} alt="C++" />;
     else if (projLanguage === "Python")
       return <img width={100} src={python} alt="C++" />;
+    else if (projLanguage === "C")
+      return <img width={100} src={c} alt="C++" />;
   };
   return (
     <div className="flex items-center justify-between bg-slate-100 px-4 py-3 rounded cursor-pointer">

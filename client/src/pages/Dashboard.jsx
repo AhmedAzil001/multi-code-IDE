@@ -24,6 +24,13 @@ const Dashboard = () => {
       version: "23.25.01",
       date: "26/02/2025",
     },
+    {
+      id: 2,
+      title: "MY PROJECT",
+      projLanguage: "C",
+      version: "23.25.01",
+      date: "26/02/2025",
+    },
   ];
 
   return (
