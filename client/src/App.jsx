@@ -5,6 +5,7 @@ import SignUp from "./pages/SignUp";
 import Editor from "./pages/Editor";
 import ErrorPage from "./pages/ErrorPage";
 import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path={"/login"} element={<Login />} />
           <Route path={"/signup"} element={<SignUp />} />
           <Route path={"/editor/:id"} element={<Editor />} />
+          <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"*"} element={<ErrorPage />} />
         </Routes>
       </Router>

@@ -1,8 +1,9 @@
 import React from "react";
 import Input from "../components/Input";
 import { Link } from "react-router-dom";
-import person from "../assets/person-fill.svg";
+import email from "../assets/person-fill.svg";
 import lock from "../assets/lock-fill.svg";
+import person from "../assets/envelope-fill.svg";
 
 const SignUp = () => {
   return (
@@ -14,9 +15,9 @@ const SignUp = () => {
         <h4 className="text-center text-2xl font-semibold mb-4">
           Enter to continue
         </h4>
-        <Input type={"text"} placeholder={"Name"} img={person} />
-        <Input type={"email"} placeholder={"Email"} img={person} />
-        <Input type={"password"} placeholder={"Password"} img={lock} />
+        <Input type={"text"} placeholder={"Jane Doe"} img={email} label={'Full Name'}/>
+        <Input type={"email"} placeholder={"example@gmail.com"} img={person} label={'Email'}/>
+        <Input type={"password"} placeholder={"Password"} img={lock} label={'Password'}/>
         <span className="text-sm px-1 tracking-wider text-gray-800">
           Forgot Password?
         </span>
