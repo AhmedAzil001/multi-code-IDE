@@ -1,5 +1,4 @@
 import React from "react";
-import java from "../assets/java.svg";
 import Project from "../components/Project";
 
 const Dashboard = () => {
@@ -14,7 +13,14 @@ const Dashboard = () => {
     {
       id: 2,
       title: "MY PROJECT",
-      projLanguage: "Java",
+      projLanguage: "C++",
+      version: "23.25.01",
+      date: "26/02/2025",
+    },
+    {
+      id: 2,
+      title: "MY PROJECT",
+      projLanguage: "Python",
       version: "23.25.01",
       date: "26/02/2025",
     },
@@ -35,10 +41,10 @@ const Dashboard = () => {
         {projects.map((data, idx) => (
           <Project
             key={data.id}
-            img={java}
             title={data.title}
             version={data.version}
             date={data.date}
+            projLanguage={data.projLanguage}
           />
         ))}
       </div>
