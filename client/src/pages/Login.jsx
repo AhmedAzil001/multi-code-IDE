@@ -15,7 +15,7 @@ const Login = () => {
           Enter your credentials
         </h4>
         <Input type={"email"} placeholder={"example@gmail.com"} img={email} label={'Email'}/>
-        <Input type={"password"} placeholder={"Password"} img={lock} label={'Password'}/>
+        <Input type={"password"} placeholder={"*********"} img={lock} label={'Password'}/>
         <span className="text-sm px-1 tracking-wider text-gray-800">
           Forgot Password?
         </span>

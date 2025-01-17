@@ -13,11 +13,11 @@ const SignUp = () => {
         className="w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-2"
       >
         <h4 className="text-center text-2xl font-semibold mb-4">
-          Enter to continue
+          Welcome to CodEngine
         </h4>
         <Input type={"text"} placeholder={"Jane Doe"} img={email} label={'Full Name'}/>
         <Input type={"email"} placeholder={"example@gmail.com"} img={person} label={'Email'}/>
-        <Input type={"password"} placeholder={"Password"} img={lock} label={'Password'}/>
+        <Input type={"password"} placeholder={"*********"} img={lock} label={'Password'}/>
         <span className="text-sm px-1 tracking-wider text-gray-800">
           Forgot Password?
         </span>
