@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ label, placeholder, type, img }) => {
+const Input = ({ label, placeholder, type, img, name, onChange }) => {
   return (
     <div className="flex flex-col">
       <span className="text-sm font-medium text-left pb-2">{label}</span>
@@ -10,6 +10,8 @@ const Input = ({ label, placeholder, type, img }) => {
           className="px-4 py-2 outline-none  w-full"
           type={type}
           placeholder={placeholder}
+          name={name}
+          onChange={onChange}
         />
       </div>
     </div>
