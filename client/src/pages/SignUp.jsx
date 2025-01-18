@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Input from "../components/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import email from "../assets/person-fill.svg";
 import lock from "../assets/lock-fill.svg";
 import person from "../assets/envelope-fill.svg";
+import axios from "axios";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -19,10 +21,24 @@ const SignUp = () => {
     }));
   };
 
-  const handleFromSubmit = (e) => {
+  const handleFromSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    try {
+      const response = await axios.post("", {
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+      const { token, message } = await response.json();
+      console.log(message);
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 z-10 flex justify-center items-center backdrop-blur-sm bg-black/20">
       <form
