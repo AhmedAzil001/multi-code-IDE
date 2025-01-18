@@ -12,6 +12,7 @@ const Input = ({ label, placeholder, type, img, name, onChange }) => {
           placeholder={placeholder}
           name={name}
           onChange={onChange}
+          required
         />
       </div>
     </div>

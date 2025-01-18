@@ -14,7 +14,7 @@ userRouter.get("/", (req, res) => {
 });
 
 userRouter.post("/signup", signUp);
-userRouter.post("/signin", signIn);
+userRouter.post("/login", signIn);
 userRouter.get("/me", auth, getUser);
 userRouter.put("/update", auth, updateUser);
 userRouter.delete("/delete", auth, deleteUser);

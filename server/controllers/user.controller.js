@@ -24,12 +24,12 @@ exports.signUp = async (req, res) => {
       // MongoDB's duplicate key error code
       return res.status(409).json({
         success: false,
-        message: "User with this email already exists",
+        message: "User with email already exists",
       });
     }
     return res.status(500).json({
       success: false,
-      message: "Bad authentication",
+      message: error.message,
     });
   }
 };

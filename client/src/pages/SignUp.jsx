@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import email from "../assets/person-fill.svg";
 import lock from "../assets/lock-fill.svg";
 import person from "../assets/envelope-fill.svg";
 import axios from "axios";
+import { base_url } from "../helper";
+import { ToastContainer, toast } from "react-toastify";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -23,21 +25,26 @@ const SignUp = () => {
 
   const handleFromSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
-      const response = await axios.post("", {
+      const response = await axios.post(base_url + "/api/v1/user/signup", {
         name: formData.fullName,
         email: formData.email,
         password: formData.password,
       });
-      const { token, message } = await response.json();
-      console.log(message);
+      const { token, success } = response.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("isLoggedIn", success);
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data?.message);
+      toast.error(error.response?.data?.message);
     }
   };
+  
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn) navigate("/dashboard");
+  },[navigate]);
 
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 z-10 flex justify-center items-center backdrop-blur-sm bg-black/20">
@@ -89,6 +96,7 @@ const SignUp = () => {
           </Link>
         </div>
       </form>
+      <ToastContainer limit={1} />
     </div>
   );
 };
