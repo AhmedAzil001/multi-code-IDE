@@ -17,36 +17,6 @@ const Dashboard = () => {
   const [projectName, setProjectName] = useState("");
 
   const navigate = useNavigate();
-  // const projects = [
-  //   {
-  //     id: 1,
-  //     title: "MY PROJECT",
-  //     projLanguage: "Java",
-  //     version: "23.25.01",
-  //     date: "26/02/2025",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "MY PROJECT",
-  //     projLanguage: "C++",
-  //     version: "23.25.01",
-  //     date: "26/02/2025",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "MY PROJECT",
-  //     projLanguage: "Python",
-  //     version: "23.25.01",
-  //     date: "26/02/2025",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "MY PROJECT",
-  //     projLanguage: "C",
-  //     version: "23.25.01",
-  //     date: "26/02/2025",
-  //   },
-  // ];
 
   const getRuntime = async () => {
     const response = await axios.get("https://emkc.org/api/v2/piston/runtimes");
@@ -130,7 +100,7 @@ const Dashboard = () => {
 
   const deleteProject = async (id) => {
     try {
-      const response = await axios.delete(
+      const response = await axios.post(
         base_url + "/api/v1/project/delete-project",
         {
           projectId: id,
@@ -142,6 +112,7 @@ const Dashboard = () => {
         }
       );
       console.log(response.data);
+      getProjects();
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
@@ -167,7 +138,7 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col gap-6 px-10">
-        {projects && projects.length > 0 ? (
+        {projects.length > 0 ? (
           projects.map((data) => (
             <Project
               key={data._id}

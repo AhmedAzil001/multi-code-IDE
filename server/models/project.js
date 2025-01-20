@@ -9,7 +9,7 @@ const projectSchema = mongoose.Schema({
   projLanguage: {
     type: String,
     required: true,
-    enum: ["python", "java", "javascript", "cpp", "c", "go", "bash"],
+    enum: ["python", "java", "javascript", "c++", "c", "go", "bash"],
   },
   code: {
     type: String,

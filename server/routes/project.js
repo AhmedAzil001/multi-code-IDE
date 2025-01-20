@@ -16,6 +16,6 @@ projectRouter.put("/save-project", auth, saveProject);
 projectRouter.get("/get-projects", auth, getProjects);
 projectRouter.get("/get-project", auth, getProject);
 projectRouter.put("/edit-project", auth, editProject);
-projectRouter.delete("/delete-project", auth, deleteProject);
+projectRouter.post("/delete-project", auth, deleteProject);
 
 module.exports = projectRouter;
