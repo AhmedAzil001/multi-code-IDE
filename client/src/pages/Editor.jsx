@@ -1,9 +1,18 @@
-import React from 'react'
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Editor = () => {
-  return (
-    <div>Editor</div>
-  )
-}
+  const { id } = useParams;
+  const navigate = useNavigate();
 
-export default Editor
+  
+
+  return (
+    <div>
+    
+    </div>
+  );
+};
+
+export default Editor;

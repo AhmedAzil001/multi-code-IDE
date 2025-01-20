@@ -3,20 +3,30 @@ import java from "../assets/java.svg";
 import cpp from "../assets/cpp.svg";
 import python from "../assets/python.svg";
 import c from "../assets/c.svg";
+import { useNavigate } from "react-router-dom";
 
-const Project = ({ img, title, version, date, projLanguage }) => {
+const Project = ({
+  img,
+  title,
+  version,
+  date,
+  projLanguage,
+  projectId,
+  onDelete,
+}) => {
+  const navigate = useNavigate();
   const selectImg = (projLanguage) => {
-    if (projLanguage === "Java")
+    if (projLanguage === "java")
       return <img width={100} src={java} alt="Java" />;
-    else if (projLanguage === "C++")
+    else if (projLanguage === "cpp")
       return <img width={100} src={cpp} alt="C++" />;
-    else if (projLanguage === "Python")
+    else if (projLanguage === "python")
       return <img width={100} src={python} alt="C++" />;
-    else if (projLanguage === "C")
-      return <img width={100} src={c} alt="C++" />;
+    else if (projLanguage === "c") return <img width={100} src={c} alt="C++" />;
   };
+
   return (
-    <div className="flex items-center justify-between bg-slate-100 px-4 py-3 rounded cursor-pointer">
+    <div className="flex items-center justify-between bg-slate-100 px-4 py-3 rounded">
       <div className="py-2 bg-slate-700 rounded p-1">
         {selectImg(projLanguage)}
       </div>
@@ -27,9 +37,20 @@ const Project = ({ img, title, version, date, projLanguage }) => {
           Created on {date}
         </p>
       </div>
-      <button className="px-6 py-2 tracking-wide bg-red-500 text-white rounded">
-        Edit
-      </button>
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={() => navigate("/editor/" + projectId)}
+          className="px-6 py-2 tracking-wide bg-black text-white rounded"
+        >
+          Open
+        </button>
+        <button
+          onClick={() => onDelete(projectId)}
+          className="px-6 py-2 tracking-wide bg-red-500 text-white rounded"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 };
