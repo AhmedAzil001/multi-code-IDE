@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { base_url } from "../helper";
+import { base_url, beautifyCode } from "../helper";
 import Editor2 from "@monaco-editor/react";
 import play from "../assets/play-fill.svg";
 import file from "../assets/file.svg";
@@ -30,9 +30,12 @@ const Editor = () => {
           },
         }
       );
-      setProject(response.data.project);
-      setCode(response.data.project.code);
-      setProjectName(response.data.project.name);
+      const project = response.data.project;
+      setProject(project);
+      const beautifiedCode = beautifyCode(project.code, project.projLanguage);
+      console.log(beautifiedCode);
+      setCode(beautifiedCode);
+      setProjectName(project.name);
       console.log("got");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
@@ -51,16 +54,16 @@ const Editor = () => {
               project.name + project.projLanguage === "python"
                 ? ".py"
                 : project.projLanguage === "java"
-                ? ".java"
-                : project.projLanguage === "javascript"
-                ? ".js"
-                : project.projLanguage === "c"
-                ? ".c"
-                : project.projLanguage === "cpp"
-                ? ".cpp"
-                : project.projLanguage === "bash"
-                ? ".sh"
-                : "",
+                  ? ".java"
+                  : project.projLanguage === "javascript"
+                    ? ".js"
+                    : project.projLanguage === "c"
+                      ? ".c"
+                      : project.projLanguage === "cpp"
+                        ? ".cpp"
+                        : project.projLanguage === "bash"
+                          ? ".sh"
+                          : "",
             content: code,
           },
         ],
@@ -99,26 +102,6 @@ const Editor = () => {
       getProject();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to edit project");
-    }
-  };
-
-  const handleEditorDidMount = (editor) => {
-    editorRef.current = editor;
-    console.log("Editor Mounted:", editor); // Debugging log
-  };
-
-  const handleIndentation = () => {
-    if (editorRef.current) {
-      const formatAction = editorRef.current.getAction(
-        "editor.action.formatDocument"
-      );
-      if (formatAction) {
-        formatAction.run();
-      } else {
-        toast.error("Code formatting is not supported for this language.");
-      }
-    } else {
-      toast.error("Editor is not ready.");
     }
   };
 
@@ -161,14 +144,19 @@ const Editor = () => {
                 >
                   Save
                 </button>
-                <button onClick={() => setEdit(false)} className="ml-2 py-1 px-2 bg-black text-white rounded">X</button>
+                <button
+                  onClick={() => setEdit(false)}
+                  className="ml-2 py-1 px-2 bg-black text-white rounded"
+                >
+                  X
+                </button>
               </>
             ) : (
               <>
                 <input
                   className="bg-white text-lg"
                   type="text"
-                  value={project?.name}
+                  value={projectName}
                   readOnly
                 />
                 <img
@@ -202,7 +190,6 @@ const Editor = () => {
             onChange={(newCode) => {
               setCode(newCode || "");
             }}
-            onMount={handleEditorDidMount}
           />
         </div>
         <div className="right w-[40%] h-[90vh] bg-slate-800 text-white">
