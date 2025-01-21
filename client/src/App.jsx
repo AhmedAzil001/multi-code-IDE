@@ -12,12 +12,12 @@ import ErrorPage from "./pages/ErrorPage";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <>
       <Router>
-        <Navbar />
         <Routes>
           <Route path={"/"} element={<Home />} />
           <Route path={"/login"} element={<Login />} />
@@ -41,6 +41,7 @@ function App() {
           <Route path={"*"} element={<ErrorPage />} />
         </Routes>
       </Router>
+      <ToastContainer />
     </>
   );
 }

@@ -6,7 +6,7 @@ import lock from "../assets/lock-fill.svg";
 import person from "../assets/envelope-fill.svg";
 import axios from "axios";
 import { base_url } from "../helper";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -96,7 +96,6 @@ const SignUp = () => {
           </Link>
         </div>
       </form>
-      <ToastContainer limit={1} />
     </div>
   );
 };
