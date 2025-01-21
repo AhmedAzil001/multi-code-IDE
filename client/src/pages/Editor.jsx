@@ -5,15 +5,19 @@ import axios from "axios";
 import { base_url } from "../helper";
 import Editor2 from "@monaco-editor/react";
 import play from "../assets/play-fill.svg";
+import file from "../assets/file.svg";
+import edit from "../assets/edit.svg";
+import right from "../assets/right.svg";
 
 const Editor = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const editorRef = useRef(null);
+  const [isEdit, setEdit] = useState(false);
+  const [projectName, setProjectName] = useState("");
 
   const getProject = async () => {
     try {
@@ -28,6 +32,8 @@ const Editor = () => {
       );
       setProject(response.data.project);
       setCode(response.data.project.code);
+      setProjectName(response.data.project.name);
+      console.log("got");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
     }
@@ -74,8 +80,25 @@ const Editor = () => {
       );
       console.log(response.data);
       toast("Project saved successfully");
+      getProject();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
+    }
+  };
+
+  const editProject = async () => {
+    try {
+      const response = await axios.put(
+        base_url + "/api/v1/project/edit-project",
+        { projectId: id, name: projectName },
+        { headers: { token: localStorage.getItem("token") } }
+      );
+      console.log(response.data);
+      toast("Project name changed successfully");
+      setEdit(false);
+      getProject();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to edit project");
     }
   };
 
@@ -91,13 +114,10 @@ const Editor = () => {
       );
       if (formatAction) {
         formatAction.run();
-        console.log("Code formatted successfully!"); // Debugging log
       } else {
-        console.error("Format action not available for the current language.");
         toast.error("Code formatting is not supported for this language.");
       }
     } else {
-      console.error("Editor instance not found.");
       toast.error("Editor is not ready.");
     }
   };
@@ -106,15 +126,70 @@ const Editor = () => {
     getProject();
   }, [id]);
 
+  const handleSaveShortcut = (e) => {
+    if (e.ctrlKey && e.key === "s") {
+      e.preventDefault();
+      saveProject();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleSaveShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleSaveShortcut);
+    };
+  }, [code]);
+
   return (
     <>
-      <div className="px-10 py-3.5 flex items-center justify-between bg-black text-white">
-        <button
-          onClick={runProject}
-          className="px-4 py-2 rounded flex gap-1 text-lg items-center bg-green-600 mx-auto"
-        >
-          Run <img src={play} alt="Run" width={25} />
-        </button>
+      <div className="px-4 py-3.5 flex items-center justify-between bg-black text-white">
+        <div className="flex items-center">
+          <img src={right} alt="" width={20} />
+          <img src={file} width={30} alt="" />
+          <div className="bg-white text-black flex justify-between px-3 py-1.5 items-center rounded ml-4">
+            {isEdit ? (
+              <>
+                <input
+                  type="text"
+                  className="bg-white text-lg outline-none border-none"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                />
+                <button
+                  onClick={editProject}
+                  className="px-2 py-1 bg-green-600 rounded text-white"
+                >
+                  Save
+                </button>
+                <button onClick={() => setEdit(false)} className="ml-2 py-1 px-2 bg-black text-white rounded">X</button>
+              </>
+            ) : (
+              <>
+                <input
+                  className="bg-white text-lg"
+                  type="text"
+                  value={project?.name}
+                  readOnly
+                />
+                <img
+                  src={edit}
+                  alt=""
+                  className="cursor-pointer"
+                  width={20}
+                  onClick={() => setEdit(true)}
+                />
+              </>
+            )}
+          </div>
+        </div>
+        <div className="w-[40%] flex justify-center">
+          <button
+            onClick={runProject}
+            className="px-4 py-2 rounded flex gap-1 text-lg items-center bg-green-600"
+          >
+            Run <img src={play} alt="Run" width={25} />
+          </button>
+        </div>
       </div>
       <div className="flex">
         <div className="left w-[60%] h-[90vh]">
@@ -130,13 +205,13 @@ const Editor = () => {
             onMount={handleEditorDidMount}
           />
         </div>
-        <div className="right w-[40%] h-[90vh] bg-black text-white">
-          <div className="py-2 px-3 text-lg font-semibold bg-slate-950 border-b">
-            Output :
+        <div className="right w-[40%] h-[90vh] bg-slate-800 text-white">
+          <div className="py-2 px-3 text-lg font-semibold  border-b text-center">
+            Output
           </div>
-          <div className={`px-4 py-3 ${error ? "text-red-600" : "text-white"}`}>
+          <pre className={`px-4 py-3 ${error ? "text-red-600" : "text-white"}`}>
             {output}
-          </div>
+          </pre>
         </div>
       </div>
     </>
