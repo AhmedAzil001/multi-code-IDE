@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logout from "../assets/logout.svg";
 
-const Navbar = () => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn')
+const Navbar = ({ user }) => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
@@ -17,12 +18,10 @@ const Navbar = () => {
         </p>
       </Link>
       {isLoggedIn ? (
-        <button
-          className="md:px-6 px-4 md:py-1.5 py-1 bg-white text-black rounded text-[1.1rem]"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
+        <div className="flex gap-5 border border-white px-4 py-2 rounded bg-slate-800 cursor-pointer absolute right-20">
+          <div>{user?.name}</div>
+          <img src={logout} width={20} alt="" className="cursor-pointer" onClick={handleLogout}/>
+        </div>
       ) : (
         <Link
           className="md:px-6 px-4 md:py-1.5 py-1 bg-white text-black rounded text-[1.1rem]"

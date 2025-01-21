@@ -15,7 +15,6 @@ const Editor = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
-  const editorRef = useRef(null);
   const [isEdit, setEdit] = useState(false);
   const [projectName, setProjectName] = useState("");
 
@@ -36,7 +35,6 @@ const Editor = () => {
       console.log(beautifiedCode);
       setCode(beautifiedCode);
       setProjectName(project.name);
-      console.log("got");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
     }
@@ -61,9 +59,7 @@ const Editor = () => {
                       ? ".c"
                       : project.projLanguage === "cpp"
                         ? ".cpp"
-                        : project.projLanguage === "bash"
-                          ? ".sh"
-                          : "",
+                        : "",
             content: code,
           },
         ],
@@ -154,7 +150,7 @@ const Editor = () => {
             ) : (
               <>
                 <input
-                  className="bg-white text-lg"
+                  className="bg-white text-lg outline-none"
                   type="text"
                   value={projectName}
                   readOnly
@@ -179,7 +175,10 @@ const Editor = () => {
           </button>
         </div>
       </div>
+
       <div className="flex">
+
+        {/* Editor screen */}
         <div className="left w-[60%] h-[90vh]">
           <Editor2
             theme="vs-dark"
@@ -192,6 +191,8 @@ const Editor = () => {
             }}
           />
         </div>
+
+        {/* Output screen */}
         <div className="right w-[40%] h-[90vh] bg-slate-800 text-white">
           <div className="py-2 px-3 text-lg font-semibold  border-b text-center">
             Output

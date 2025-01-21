@@ -9,11 +9,9 @@ export const beautifyCode = (code, language) => {
   try {
     switch (language.toLowerCase()) {
       case "javascript":
-      case "typescript":
       case "java":
       case "c":
       case "c++":
-
         return beautify(code, {
           indent_size: 2, // Customize indent size
           indent_char: " ",

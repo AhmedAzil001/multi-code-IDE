@@ -3,6 +3,9 @@ import java from "../assets/java.svg";
 import cpp from "../assets/cpp.svg";
 import python from "../assets/python.svg";
 import c from "../assets/c.svg";
+import javascript from "../assets/javascript.svg";
+import typescript from "../assets/typescript.svg";
+import golang from "../assets/golang.svg";
 import { useNavigate } from "react-router-dom";
 
 const Project = ({
@@ -18,11 +21,17 @@ const Project = ({
   const selectImg = (projLanguage) => {
     if (projLanguage === "java")
       return <img width={100} src={java} alt="Java" />;
-    else if (projLanguage === "cpp")
+    else if (projLanguage === "c++")
       return <img width={100} src={cpp} alt="C++" />;
     else if (projLanguage === "python")
       return <img width={100} src={python} alt="C++" />;
     else if (projLanguage === "c") return <img width={100} src={c} alt="C++" />;
+    else if (projLanguage === "javascript")
+      return <img width={100} src={javascript} alt="C++" />;
+    else if (projLanguage === "typescript")
+      return <img width={100} src={typescript} alt="C++" />;
+    else if (projLanguage === "go")
+      return <img width={100} src={golang} alt="C++" />;
   };
 
   return (
