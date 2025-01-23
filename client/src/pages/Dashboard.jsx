@@ -14,7 +14,7 @@ const Dashboard = () => {
   const [languageCategory, setLanguageCategory] = useState([]);
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState({
-    langauge: "python",
+    langauge: "Choose",
     version: "",
   });
   const [projectName, setProjectName] = useState("");
@@ -41,17 +41,17 @@ const Dashboard = () => {
   const getRuntime = async () => {
     const response = await axios.get("https://emkc.org/api/v2/piston/runtimes");
     const data = response.data;
-    const languages = ["python", "javascript", "c", "c++", "java", "go"];
+    const languages = ["python", "javascript", "c", "java", "go"];
     const filteredLanguages = data
       .filter((runtime) => languages.includes(runtime.language))
       .map((runtime) => ({
         label: `${runtime.language} (${runtime.version})`,
         version: runtime.version,
-        language: runtime.language === "c++" ? "cpp" : runtime.language,
+        language: runtime.language,
       }))
       .filter((lang) => lang.version !== "1.32.3")
       .reverse();
-    setLanguageCategory(finalLanguage);
+    setLanguageCategory(filteredLanguages);
   };
 
   const getProjects = async () => {

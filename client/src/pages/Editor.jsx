@@ -1,22 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { base_url, beautifyCode } from "../helper";
 import Editor2 from "@monaco-editor/react";
 import play from "../assets/play-fill.svg";
-import file from "../assets/file.svg";
-import edit from "../assets/edit.svg";
-import right from "../assets/right.svg";
+import editIcon from "../assets/edit.svg";
 
 const Editor = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
-  const [error, setError] = useState("");
   const [isEdit, setEdit] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getProject = async () => {
     try {
@@ -29,71 +27,74 @@ const Editor = () => {
           },
         }
       );
-      const project = response.data.project;
-      setProject(project);
-      const beautifiedCode = beautifyCode(project.code, project.projLanguage);
-      console.log(beautifiedCode);
+      const projectData = response.data.project;
+      setProject(projectData);
+      setProjectName(projectData.name);
+      const beautifiedCode = beautifyCode(
+        projectData.code,
+        projectData.projLanguage
+      );
       setCode(beautifiedCode);
-      setProjectName(project.name);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
     }
   };
 
+  const extensions = {
+    python: ".py",
+    java: ".java",
+    javascript: ".js",
+    c: ".c",
+    cpp: ".cpp",
+  };
+
   const runProject = async () => {
-    const response = await axios.post(
-      "https://emkc.org/api/v2/piston/execute",
-      {
-        language: project.projLanguage,
-        version: project.version,
-        files: [
-          {
-            filename:
-              project.name + project.projLanguage === "python"
-                ? ".py"
-                : project.projLanguage === "java"
-                  ? ".java"
-                  : project.projLanguage === "javascript"
-                    ? ".js"
-                    : project.projLanguage === "c"
-                      ? ".c"
-                      : project.projLanguage === "cpp"
-                        ? ".cpp"
-                        : "",
-            content: code,
-          },
-        ],
-      }
-    );
-    const data = response.data;
-    setOutput(data.run.output);
-    setError(data.run.code === 1 ? true : false);
+    const filename = project.name + (extensions[project.projLanguage] || "");
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://emkc.org/api/v2/piston/execute",
+        {
+          language: project.projLanguage,
+          version: project.version,
+          files: [{ filename, content: code }],
+        }
+      );
+      const data = response.data;
+      setOutput(data.run.output);
+    } catch (error) {
+      setOutput("Failed to run the project");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const saveProject = async () => {
     try {
-      const response = await axios.put(
-        base_url + "/api/v1/project/save-project",
+      await axios.put(
+        `${base_url}/api/v1/project/save-project`,
         { projectId: id, code: code },
         { headers: { token: localStorage.getItem("token") } }
       );
-      console.log(response.data);
-      toast("Project saved successfully");
+      toast.success("Project saved successfully", { autoClose: 2000 });
       getProject();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch project");
+      toast.error(error.response?.data?.message || "Failed to save project");
     }
   };
 
   const editProject = async () => {
+    if (projectName.trim() === project.name) {
+      setEdit(false);
+      return;
+    }
     try {
-      const response = await axios.put(
-        base_url + "/api/v1/project/edit-project",
+      await axios.put(
+        `${base_url}/api/v1/project/edit-project`,
         { projectId: id, name: projectName },
         { headers: { token: localStorage.getItem("token") } }
       );
-      console.log(response.data);
-      toast("Project name changed successfully");
+      toast.success("Project name changed successfully", { autoClose: 2000 });
       setEdit(false);
       getProject();
     } catch (error) {
@@ -106,7 +107,7 @@ const Editor = () => {
   }, [id]);
 
   const handleSaveShortcut = (e) => {
-    if (e.ctrlKey && e.key === "s") {
+    if (e.ctrlKey && (e.key === "s" || e.key === "S")) {
       e.preventDefault();
       saveProject();
     }
@@ -120,89 +121,87 @@ const Editor = () => {
   }, [code]);
 
   return (
-    <>
-      <div className="px-4 py-3.5 flex items-center justify-between bg-black text-white">
-        <div className="flex items-center">
-          <img src={right} alt="" width={20} />
-          <img src={file} width={30} alt="" />
-          <div className="bg-white text-black flex justify-between px-3 py-1.5 items-center rounded ml-4">
-            {isEdit ? (
-              <>
-                <input
-                  type="text"
-                  className="bg-white text-lg outline-none border-none"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                />
-                <button
-                  onClick={editProject}
-                  className="px-2 py-1 bg-green-600 rounded text-white"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEdit(false)}
-                  className="ml-2 py-1 px-2 bg-black text-white rounded"
-                >
-                  X
-                </button>
-              </>
-            ) : (
-              <>
-                <input
-                  className="bg-white text-lg outline-none"
-                  type="text"
-                  value={projectName}
-                  readOnly
-                />
-                <img
-                  src={edit}
-                  alt=""
-                  className="cursor-pointer"
-                  width={20}
-                  onClick={() => setEdit(true)}
-                />
-              </>
-            )}
-          </div>
+    <div className="h-screen flex flex-col bg-gray-900 text-white">
+      {/* Top Section */}
+      <div className="flex justify-between items-center px-6 py-4 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center gap-4">
+          {isEdit ? (
+            <>
+              <input
+                type="text"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className="bg-gray-700 text-white px-2 py-1 rounded outline-none border border-gray-600"
+              />
+              <button
+                onClick={editProject}
+                className="bg-green-600 px-3 py-1 rounded"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEdit(false)}
+                className="bg-red-600 px-3 py-1 rounded"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-semibold">{projectName}</span>
+              <img
+                src={editIcon}
+                alt="Edit"
+                className="cursor-pointer w-5"
+                onClick={() => setEdit(true)}
+              />
+            </div>
+          )}
         </div>
-        <div className="w-[40%] flex justify-center">
-          <button
-            onClick={runProject}
-            className="px-4 py-2 rounded flex gap-1 text-lg items-center bg-green-600"
-          >
-            Run <img src={play} alt="Run" width={25} />
-          </button>
-        </div>
+        <button
+          onClick={runProject}
+          className="flex items-center gap-2 font-medium bg-green-600 px-4 py-2 rounded"
+        >
+          Run <img src={play} alt="Run" className="w-5" />
+        </button>
       </div>
 
-      <div className="flex">
-
-        {/* Editor screen */}
-        <div className="left w-[60%] h-[90vh]">
+      {/* Bottom Section */}
+      <div className="flex flex-1">
+        {/* Editor Section */}
+        <div className="w-1/2 h-full border-r border-gray-700">
           <Editor2
             theme="vs-dark"
             height="100%"
-            width="100%"
             language={project?.projLanguage}
             value={code}
-            onChange={(newCode) => {
-              setCode(newCode || "");
-            }}
+            onChange={(newCode) => setCode(newCode || "")}
           />
         </div>
 
-        {/* Output screen */}
-        <div className="right w-[40%] h-[90vh] bg-slate-800 text-white">
-          <div className="py-2 px-3 text-lg font-semibold  border-b text-center">
+        {/* Output Section */}
+        <div className="w-1/2 h-full bg-gray-800">
+          <div className="p-4 border-b border-gray-700 text-lg font-semibold">
             Output
           </div>
-          <pre className={`px-4 py-3 ${error ? "text-red-600" : "text-white"}`}>
-            {output}
-          </pre>
+          <div className="p-4 overflow-auto">
+            {loading ? (
+              <div className="text-center animate-pulse text-gray-400">
+                Running code...
+              </div>
+            ) : (
+              <pre
+                className={`whitespace-pre-wrap ${
+                  output.includes("error") ? "text-red-500" : "text-green-500"
+                }`}
+              >
+                {output}
+              </pre>
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
