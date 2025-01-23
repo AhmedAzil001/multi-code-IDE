@@ -18,7 +18,7 @@ const Navbar = ({ user }) => {
         </p>
       </Link>
       {isLoggedIn ? (
-        <div className="flex gap-5 border border-gray-700 px-4 py-2 rounded bg-slate-800 absolute right-20">
+        <div className="flex gap-5 border border-gray-700 px-4 md:py-2 py-1.5 rounded bg-slate-800 ">
           <div>{user?.name}</div>
           <img src={logout} width={20} alt="" className="cursor-pointer" onClick={handleLogout}/>
         </div>

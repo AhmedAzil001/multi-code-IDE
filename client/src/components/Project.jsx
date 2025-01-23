@@ -35,27 +35,27 @@ const Project = ({
   };
 
   return (
-    <div className="flex items-center justify-between bg-slate-100 px-4 py-3 rounded">
-      <div className="py-2 bg-slate-700 rounded p-1">
+    <div className="flex items-center flex-col md:flex-row justify-between bg-slate-100 px-4 py-3 rounded">
+      <div className="py-2 bg-slate-700 rounded p-1 ">
         {selectImg(projLanguage)}
       </div>
-      <div className="w-full text-left px-8 py-4 flex flex-col gap-1">
-        <h4 className="text-xl font-medium tracking-wide">{title}</h4>
+      <div className="w-full md:text-left text-center md:px-8 px-5 py-4 flex flex-col gap-1">
+        <h4 className="text-xl font-medium tracking-wide break-words">{title}</h4>
         <p className="text-xs text-slate-400">Version : {version}</p>
         <p className="text-xs text-slate-400 [word-spacing:2px]">
           Created on {date}
         </p>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex md:flex-col md:gap-2 gap-10">
         <button
           onClick={() => navigate("/editor/" + projectId)}
-          className="px-6 py-2 tracking-wide bg-black text-white rounded"
+          className="md:px-6 px-4 md:py-2 py-1.5 tracking-wide bg-black text-white rounded"
         >
           Open
         </button>
         <button
           onClick={() => onDelete(projectId)}
-          className="px-6 py-2 tracking-wide bg-red-500 text-white rounded"
+          className="md:px-6 px-4 md:py-2 py-1.5 tracking-wide bg-red-500 text-white rounded"
         >
           Delete
         </button>
