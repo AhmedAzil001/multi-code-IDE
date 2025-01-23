@@ -48,11 +48,10 @@ const Dashboard = () => {
         label: `${runtime.language} (${runtime.version})`,
         version: runtime.version,
         language: runtime.language === "c++" ? "cpp" : runtime.language,
-      }));
-    const finalLanguage = filteredLanguages.filter(
-      (lang) => lang.version !== "1.32.3"
-    );
-    setLanguageCategory(finalLanguage.reverse());
+      }))
+      .filter((lang) => lang.version !== "1.32.3")
+      .reverse();
+    setLanguageCategory(finalLanguage);
   };
 
   const getProjects = async () => {
