@@ -1,8 +1,6 @@
-import prettier from "prettier/standalone";
-import parserBabel from "prettier/parser-babel"; // For JavaScript and TypeScript
 import beautify from "js-beautify";
 
-export const base_url = "http://localhost:3000";
+export const base_url = "https://multi-code-ide-backend.onrender.com";
 
 export const beautifyCode = (code, language) => {
   // console.log(language)

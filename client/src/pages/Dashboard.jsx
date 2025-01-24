@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import left from "../assets/left.svg";
 import right from "../assets/right-black.svg";
 import moment from "moment";
+import { debounce } from "lodash";
 
 const Dashboard = () => {
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
@@ -108,6 +109,7 @@ const Dashboard = () => {
 
   const deleteProject = async (id) => {
     try {
+      setDashboardData((prev) => ({ ...prev, loading: true }));
       const response = await axios.post(
         base_url + "/api/v1/project/delete-project",
         {

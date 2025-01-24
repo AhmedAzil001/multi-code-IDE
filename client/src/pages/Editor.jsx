@@ -17,6 +17,7 @@ const Editor = () => {
   const [isEdit, setEdit] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [saveWait, setSaveWait] = useState(false);
 
   const getProject = useCallback(async () => {
     try {
@@ -37,6 +38,7 @@ const Editor = () => {
         projectData.projLanguage
       );
       setCode(beautifiedCode);
+      setSaveWait(false);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
     }
@@ -91,6 +93,7 @@ const Editor = () => {
       return;
     }
     try {
+      setSaveWait(true);
       await axios.put(
         `${base_url}/api/v1/project/edit-project`,
         { projectId: id, name: projectName },
@@ -140,8 +143,11 @@ const Editor = () => {
               />
               <button
                 onClick={editProject}
-                className="bg-green-600 px-3 py-1 rounded"
+                className="bg-green-600 px-3 py-1 rounded flex gap-1 items-center"
               >
+                {saveWait && (
+                  <div className="w-4 h-4 border-2 border-gray-300 border-t-4 border-t-blue-400 rounded-full animate-spin"></div>
+                )}{" "}
                 Save
               </button>
               <button
@@ -196,7 +202,7 @@ const Editor = () => {
         {/* Output Section */}
         <div className="md:w-1/2 h-full bg-gray-800">
           <div className="p-4 border-b border-gray-700 text-lg font-semibold">
-            Output
+            Output {`(Ctrl + s to save project)`}
           </div>
           <div className="p-4 overflow-auto">
             {loading ? (
