@@ -7,7 +7,9 @@ const Home = () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn) navigate("/dashboard");
   }, [navigate]);
-  return <div>Home</div>;
+  return <div>
+    
+  </div>;
 };
 
 export default Home;

@@ -88,7 +88,7 @@ const SignUp = () => {
         </button>
         <div className="flex items-center gap-2 px-1">
           <p className="text-gray-800 text-sm">Already have an account?</p>
-          <Link to={"/login"} className="text-gray-800 text-sm font-medium">
+          <Link to={"/"} className="text-gray-800 text-sm font-medium">
             Login
           </Link>
         </div>

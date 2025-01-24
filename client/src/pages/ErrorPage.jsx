@@ -11,7 +11,7 @@ const ErrorPage = () => {
           Sorry, the page you are looking for does not exists.
         </p>
         <Link to={"/"} className="px-4 py-2 bg-black text-white rounded mt-4">
-          Go to Home
+          Go to Login
         </Link>
       </div>
     </div>
