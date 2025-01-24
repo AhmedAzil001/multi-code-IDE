@@ -41,7 +41,7 @@ const Login = () => {
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 z-10 flex justify-center items-center backdrop-blur-sm bg-black/20">
       <form
-        className="md:w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-1"
+        className="md:w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-3"
         onSubmit={handleFormSubmit}
       >
         <h4 className="text-center text-2xl font-semibold mb-4">
@@ -63,9 +63,6 @@ const Login = () => {
           name={"password"}
           onChange={handleChange}
         />
-        <span className="text-sm px-1 tracking-wider text-gray-800">
-          Forgot Password?
-        </span>
         <button
           type="submit"
           className="w-full px-4 py-2 my-2 flex items-center justify-center bg-black text-white rounded"

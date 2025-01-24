@@ -14,7 +14,7 @@ const projectRouter = Router();
 projectRouter.post("/create-project", auth, createProject);
 projectRouter.put("/save-project", auth, saveProject);
 projectRouter.get("/get-projects", auth, getProjects);
-projectRouter.get("/get-project", auth, getProject);
+projectRouter.post("/get-project", auth, getProject);
 projectRouter.put("/edit-project", auth, editProject);
 projectRouter.post("/delete-project", auth, deleteProject);
 

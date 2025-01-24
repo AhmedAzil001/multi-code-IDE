@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import left from "../assets/left.svg";
 import right from "../assets/right-black.svg";
+import moment from "moment";
 
 const Dashboard = () => {
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
@@ -167,7 +168,7 @@ const Dashboard = () => {
 
           {/* Project mapping */}
           <div className="flex flex-col gap-6 md:px-10 px-1">
-            {dashboardData.projects.length > 0 ? (
+            {dashboardData.projects?.length > 0 ? (
               dashboardData.projects
                 .slice((currentPage - 1) * 3, currentPage * 3)
                 .map((data) => (
@@ -175,7 +176,7 @@ const Dashboard = () => {
                     key={data._id}
                     title={data.name}
                     version={data.version}
-                    date={data.date}
+                    date={moment(data.date).format("ll")}
                     projLanguage={data.projLanguage}
                     projectId={data._id}
                     onDelete={deleteProject}
@@ -235,7 +236,7 @@ const Dashboard = () => {
           )}
 
           {/* pagination */}
-          {dashboardData.projects.length > 3 && (
+          {dashboardData.projects?.length > 3 && (
             <div className="flex gap-2 items-center py-6 justify-center">
               <img
                 src={left}

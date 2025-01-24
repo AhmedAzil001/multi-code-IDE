@@ -80,9 +80,6 @@ const SignUp = () => {
           onChange={handleChange}
           name={"password"}
         />
-        <span className="text-sm px-1 tracking-wider text-gray-800">
-          Forgot Password?
-        </span>
         <button
           type="submit"
           className="w-full px-4 py-2 my-2 flex items-center justify-center bg-black text-white rounded"
@@ -90,7 +87,7 @@ const SignUp = () => {
           Sign Up
         </button>
         <div className="flex items-center gap-2 px-1">
-          <p className="text-gray-800 text-sm">Don't have an account?</p>
+          <p className="text-gray-800 text-sm">Already have an account?</p>
           <Link to={"/login"} className="text-gray-800 text-sm font-medium">
             Login
           </Link>

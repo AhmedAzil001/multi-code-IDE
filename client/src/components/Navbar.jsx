@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logout from "../assets/logout.svg";
-import { lazy } from "react";
 
 const Navbar = ({ user }) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/");
+    navigate("/login");
   };
   const [show, setShow] = useState(false);
 

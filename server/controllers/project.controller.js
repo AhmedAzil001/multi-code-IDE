@@ -13,8 +13,6 @@ function getStartupCode(language) {
     return '#include <stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    return 0;\n}';
   } else if (language.toLowerCase() === "go") {
     return 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello World")\n}';
-  } else if (language.toLowerCase() === "bash") {
-    return 'echo "Hello World"';
   } else {
     return "Language not supported";
   }
@@ -51,7 +49,7 @@ exports.createProject = async (req, res) => {
 
 exports.saveProject = async (req, res) => {
   try {
-    const { projectId, code } = req.body;
+    const { projectId, code, date } = req.body;
 
     const project = await ProjectModel.findOneAndUpdate(
       { _id: projectId },
