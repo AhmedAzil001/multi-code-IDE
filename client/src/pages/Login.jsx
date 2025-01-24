@@ -41,7 +41,7 @@ const Login = () => {
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 z-10 flex justify-center items-center backdrop-blur-sm bg-black/20">
       <form
-        className="w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-1"
+        className="md:w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-1"
         onSubmit={handleFormSubmit}
       >
         <h4 className="text-center text-2xl font-semibold mb-4">

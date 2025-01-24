@@ -11,14 +11,13 @@ import right from "../assets/right-black.svg";
 
 const Dashboard = () => {
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState({
-    langauge: "",
-    version: "",
-  });
   const [projectName, setProjectName] = useState("");
   const modalRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [selectedLanguage, setSelectedLanguage] = useState({
+    langauge: "python",
+    version: "3.10.0",
+  });
   const [dashboardData, setDashboardData] = useState({
     user: {},
     projects: [],
@@ -59,7 +58,7 @@ const Dashboard = () => {
         languageCategory: filteredLanguages,
         loading: false,
       });
-      console.log("done")
+      console.log("done");
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
@@ -123,6 +122,8 @@ const Dashboard = () => {
       );
       console.log(response.data);
       fetchData();
+      console.log(currentPage);
+      setCurrentPage(1);
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
@@ -137,14 +138,13 @@ const Dashboard = () => {
     };
     if (openCreateProjectModal) {
       document.addEventListener("mousedown", handleOutsideClick);
-      document.body.style.overflow='hidden'
+      document.body.style.overflow = "hidden";
     } else {
       document.removeEventListener("mousedown", handleOutsideClick);
-      document.body.style.overflow='unset'
+      document.body.style.overflow = "unset";
     }
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
-      
     };
   }, [openCreateProjectModal]);
 
@@ -196,14 +196,15 @@ const Dashboard = () => {
               <form
                 ref={modalRef}
                 onSubmit={createProject}
-                className="bg-white px-7 py-4 flex flex-col gap-4 rounded"
+                className="bg-white px-7 py-4 flex flex-col gap-4 rounded md:w-[25%] w-[85%]"
               >
                 <h2 className="text-2xl font-medium">Create a project</h2>
                 <div className="h-[0.1rem] bg-gray-600"></div>
-                <Input
+                <input
+                  className="px-4 py-3 outline-none  w-full border rounded"
+                  type="text"
                   label={"Name of the project"}
                   placeholder={"Ex:- My Java project"}
-                  type={"text"}
                   name={"title"}
                   onChange={(e) => setProjectName(e.target.value)}
                 />

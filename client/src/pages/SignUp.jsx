@@ -6,7 +6,7 @@ import lock from "../assets/lock-fill.svg";
 import person from "../assets/envelope-fill.svg";
 import axios from "axios";
 import { base_url } from "../helper";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -40,21 +40,21 @@ const SignUp = () => {
       toast.error(error.response?.data?.message);
     }
   };
-  
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn) navigate("/dashboard");
-  },[navigate]);
+  }, [navigate]);
 
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 z-10 flex justify-center items-center backdrop-blur-sm bg-black/20">
       <form
         action=""
-        className="w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-2"
+        className="md:w-[25%] px-6 py-4 bg-white rounded-lg flex flex-col gap-2"
         onSubmit={handleFromSubmit}
       >
         <h4 className="text-center text-2xl font-semibold mb-4">
-          Welcome to CodEngine
+          Welcome to CodeEngine
         </h4>
         <Input
           type={"text"}

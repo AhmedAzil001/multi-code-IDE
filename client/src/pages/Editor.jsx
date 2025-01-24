@@ -123,15 +123,15 @@ const Editor = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-900 text-white">
       {/* Top Section */}
-      <div className="flex justify-between items-center px-6 py-4 bg-gray-800 border-b border-gray-700">
-        <div className="flex items-center gap-4">
+      <div className="flex justify-between items-center md:px-6 px-2 py-4 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center gap-2 md:gap-4">
           {isEdit ? (
             <>
               <input
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
-                className="bg-gray-700 text-white px-2 py-1 rounded outline-none border border-gray-600"
+                className="bg-gray-700 text-white px-2 py-1 md:w-[20rem] w-[10rem] rounded outline-none border border-gray-600"
               />
               <button
                 onClick={editProject}
@@ -148,7 +148,12 @@ const Editor = () => {
             </>
           ) : (
             <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold">{projectName}</span>
+              <input
+                type="text"
+                value={projectName}
+                className="md:text-xl w-[10rem] md:w-[16rem] text-base font-semibold overflow-scroll bg-gray-800 outline-none"
+                readOnly
+              />
               <img
                 src={editIcon}
                 alt="Edit"
@@ -158,18 +163,20 @@ const Editor = () => {
             </div>
           )}
         </div>
-        <button
-          onClick={runProject}
-          className="flex items-center gap-2 font-medium bg-green-600 px-4 py-2 rounded"
-        >
-          Run <img src={play} alt="Run" className="w-5" />
-        </button>
+        {!isEdit && (
+          <button
+            onClick={runProject}
+            className="flex items-center gap-2 font-medium bg-green-600 md:px-4 px-2.5 md:py-2 py-1.5 rounded"
+          >
+            Run <img src={play} alt="Run" className="w-5" />
+          </button>
+        )}
       </div>
 
       {/* Bottom Section */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col md:flex-row">
         {/* Editor Section */}
-        <div className="w-1/2 h-full border-r border-gray-700">
+        <div className="md:w-1/2 h-full border-r border-gray-700">
           <Editor2
             theme="vs-dark"
             height="100%"
@@ -180,7 +187,7 @@ const Editor = () => {
         </div>
 
         {/* Output Section */}
-        <div className="w-1/2 h-full bg-gray-800">
+        <div className="md:w-1/2 h-full bg-gray-800">
           <div className="p-4 border-b border-gray-700 text-lg font-semibold">
             Output
           </div>
