@@ -17,11 +17,11 @@ export const beautifyCode = (code, language) => {
         });
 
       default:
-        console.warn("Language not supported for beautification");
+        // console.warn("Language not supported for beautification");
         return code; // Return original code for unsupported languages
     }
   } catch (error) {
-    console.error(`Error formatting ${language} code:`, error);
+    // console.error(`Error formatting ${language} code:`, error);
     return code; // Return unformatted code in case of errors
   }
 };

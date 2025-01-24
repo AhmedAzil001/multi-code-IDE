@@ -64,7 +64,6 @@ const Editor = () => {
           files: [{ filename, content: code }],
         }
       );
-      saveProject();
       const data = response.data;
       setOutput(data.run.output);
     } catch (error) {
@@ -81,7 +80,7 @@ const Editor = () => {
         { projectId: id, code: code },
         { headers: { token: localStorage.getItem("token") } }
       );
-      toast.success("Project saved successfully", { autoClose: 2000 });
+      toast.success("Project saved successfully");
       getProject();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save project");
@@ -102,7 +101,8 @@ const Editor = () => {
       );
       toast.success("Project name changed successfully", { autoClose: 2000 });
       setEdit(false);
-      getProject();
+      setProjectName(projectName);
+      setSaveWait(false);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to edit project");
     }
@@ -112,15 +112,12 @@ const Editor = () => {
     getProject();
   }, [id]);
 
-  const handleSaveShortcut = useCallback(
-    (e) => {
-      if (e.ctrlKey && e.key === "s") {
-        e.preventDefault();
-        saveProject();
-      }
-    },
-    [code]
-  );
+  const handleSaveShortcut = (e) => {
+    if (e.ctrlKey && e.key === "s") {
+      e.preventDefault();
+      saveProject();
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("keydown", handleSaveShortcut);
@@ -176,12 +173,20 @@ const Editor = () => {
           )}
         </div>
         {!isEdit && (
-          <button
-            onClick={runProject}
-            className="flex items-center gap-2 font-medium bg-green-600 md:px-4 px-2.5 md:py-2 py-1.5 rounded"
-          >
-            Run <img src={play} alt="Run" className="w-5" />
-          </button>
+          <>
+            <button
+              onClick={saveProject}
+              className="lg:hidden flex items-center gap-2 font-medium bg-white text-black border border-gray-700 md:px-4 px-3 md:py-2 py-1.5 rounded"
+            >
+              Save
+            </button>
+            <button
+              onClick={runProject}
+              className="flex items-center gap-2 font-medium bg-green-600 md:px-4 px-2.5 md:py-2 py-1.5 rounded"
+            >
+              Run <img src={play} alt="Run" className="w-5" />
+            </button>
+          </>
         )}
       </div>
 
@@ -202,8 +207,8 @@ const Editor = () => {
         </Suspense>
         {/* Output Section */}
         <div className="md:w-1/2 h-full bg-gray-800">
-          <div className="p-4 border-b border-gray-700 text-lg font-semibold">
-            Output {`(Ctrl + s to save project)`}
+          <div className="p-4 border-b border-gray-700 text-lg font-semibold flex gap-2 items-center">
+            Output <div className="hidden lg:inline">{`(Ctrl + s to save project)`}</div>
           </div>
           <div className="p-4 overflow-auto">
             {loading ? (
