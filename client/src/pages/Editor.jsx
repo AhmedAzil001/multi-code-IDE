@@ -64,6 +64,7 @@ const Editor = () => {
           files: [{ filename, content: code }],
         }
       );
+      saveProject();
       const data = response.data;
       setOutput(data.run.output);
     } catch (error) {
