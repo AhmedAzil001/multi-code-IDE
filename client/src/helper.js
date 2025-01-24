@@ -5,7 +5,7 @@ import beautify from "js-beautify";
 export const base_url = "http://localhost:3000";
 
 export const beautifyCode = (code, language) => {
-  console.log(language)
+  // console.log(language)
   try {
     switch (language.toLowerCase()) {
       case "javascript":

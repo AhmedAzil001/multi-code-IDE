@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { base_url, beautifyCode } from "../helper";
-import Editor2 from "@monaco-editor/react";
 import play from "../assets/play-fill.svg";
 import editIcon from "../assets/edit.svg";
+import { debounce } from "lodash";
+const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 
 const Editor = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const Editor = () => {
   const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const getProject = async () => {
+  const getProject = useCallback(async () => {
     try {
       const response = await axios.post(
         `${base_url}/api/v1/project/get-project`,
@@ -38,7 +39,7 @@ const Editor = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch project");
     }
-  };
+  }, [id]);
 
   const extensions = {
     python: ".py",
@@ -69,7 +70,7 @@ const Editor = () => {
     }
   };
 
-  const saveProject = async () => {
+  const saveProject = debounce(async () => {
     try {
       await axios.put(
         `${base_url}/api/v1/project/save-project`,
@@ -81,9 +82,9 @@ const Editor = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save project");
     }
-  };
+  }, 500);
 
-  const editProject = async () => {
+  const editProject = debounce(async () => {
     if (projectName.trim() === project.name) {
       setEdit(false);
       return;
@@ -100,25 +101,28 @@ const Editor = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to edit project");
     }
-  };
+  }, 500);
 
   useEffect(() => {
     getProject();
   }, [id]);
 
-  const handleSaveShortcut = (e) => {
-    if (e.ctrlKey && (e.key === "s" || e.key === "S")) {
-      e.preventDefault();
-      saveProject();
-    }
-  };
+  const handleSaveShortcut = useCallback(
+    (e) => {
+      if (e.ctrlKey && e.key === "s") {
+        e.preventDefault();
+        saveProject();
+      }
+    },
+    [code]
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleSaveShortcut);
     return () => {
       window.removeEventListener("keydown", handleSaveShortcut);
     };
-  }, [code]);
+  }, [handleSaveShortcut]);
 
   return (
     <div className="h-screen flex flex-col bg-gray-900 text-white">
@@ -176,16 +180,18 @@ const Editor = () => {
       {/* Bottom Section */}
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Editor Section */}
-        <div className="md:w-1/2 h-full border-r border-gray-700">
-          <Editor2
-            theme="vs-dark"
-            height="100%"
-            language={project?.projLanguage}
-            value={code}
-            onChange={(newCode) => setCode(newCode || "")}
-          />
-        </div>
-
+        <Suspense fallback={<div>Loading Editor...</div>}>
+          <div className="md:w-1/2 h-full border-r border-gray-700">
+            <MonacoEditor
+              theme="vs-dark"
+              height="100%"
+              width="100%"
+              language={project?.projLanguage}
+              value={code}
+              onChange={(newCode) => setCode(newCode || "")}
+            />
+          </div>
+        </Suspense>
         {/* Output Section */}
         <div className="md:w-1/2 h-full bg-gray-800">
           <div className="p-4 border-b border-gray-700 text-lg font-semibold">

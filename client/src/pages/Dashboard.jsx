@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState, version } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Project from "../components/Project";
 import axios from "axios";
 import { base_url } from "../helper";
 import { toast } from "react-toastify";
-import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import left from "../assets/left.svg";
@@ -47,7 +46,7 @@ const Dashboard = () => {
         .map((runtime) => ({
           label: `${runtime.language} (${runtime.version})`,
           version: runtime.version,
-          language: runtime.language === "c++" ? "cpp" : runtime.language,
+          language: runtime.language,
         }))
         .filter((lang) => lang.version !== "1.32.3")
         .reverse();
@@ -58,7 +57,6 @@ const Dashboard = () => {
         languageCategory: filteredLanguages,
         loading: false,
       });
-      console.log("done");
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
@@ -99,7 +97,7 @@ const Dashboard = () => {
         }
       );
       const data = response.data;
-      console.log(data);
+      // console.log(data);
       setOpenCreateProjectModal(false);
       navigate("/editor/" + data.project._id);
     } catch (error) {
@@ -122,7 +120,6 @@ const Dashboard = () => {
       );
       console.log(response.data);
       fetchData();
-      console.log(currentPage);
       setCurrentPage(1);
     } catch (error) {
       toast.error(error.response?.data?.message);
@@ -130,7 +127,6 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    console.log(dashboardData);
     const handleOutsideClick = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
         setOpenCreateProjectModal(false);
@@ -156,7 +152,7 @@ const Dashboard = () => {
           <div className="w-20 h-20 border-4 border-gray-300 border-t-4 border-t-blue-400 rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="md:px-20 px-5 py-4">
+        <div className="h-[85vh] md:px-20 px-5 py-4">
           <div className="flex justify-between items-center mb-10">
             <h1 className="md:text-2xl text-lg font-medium tracking-wide [word-spacing:2px]">
               Hi, {dashboardData.user.name}
@@ -275,6 +271,7 @@ const Dashboard = () => {
           )}
         </div>
       )}
+      {/* <Footer/> */}
     </>
   );
 };
