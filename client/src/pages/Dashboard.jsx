@@ -100,10 +100,11 @@ const Dashboard = () => {
       );
       const data = response.data;
       // console.log(data);
-      setOpenCreateProjectModal(false);
       navigate("/editor/" + data.project._id);
     } catch (error) {
       toast.error(error.response?.data?.message);
+    } finally {
+      setOpenCreateProjectModal(false);
     }
   };
 
@@ -122,7 +123,11 @@ const Dashboard = () => {
         }
       );
       console.log(response.data);
-      fetchData();
+      setDashboardData((prev) => ({
+        ...prev,
+        projects: prev.projects.filter((data) => data._id !== id),
+        loading: false,
+      }));
       setCurrentPage(1);
     } catch (error) {
       toast.error(error.response?.data?.message);
@@ -199,17 +204,21 @@ const Dashboard = () => {
               >
                 <h2 className="text-2xl font-medium">Create a project</h2>
                 <div className="h-[0.1rem] bg-gray-600"></div>
-                <input
-                  className="px-4 py-3 outline-none  w-full border rounded"
-                  type="text"
-                  label={"Name of the project"}
-                  placeholder={"Ex:- My Java project"}
-                  name={"title"}
-                  onChange={(e) => setProjectName(e.target.value)}
-                />
+                <div className="flex flex-col gap-1">
+                  <div className="text-sm font-medium px-1">Project Title</div>
+                  <input
+                    className="px-4 py-3 outline-none  w-full border rounded"
+                    type="text"
+                    label={"Name of the project"}
+                    placeholder={"Ex:- My Java project"}
+                    name={"title"}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="flex flex-col gap-2">
                   <div className="text-sm font-medium px-1">
-                    Choose language
+                    Choose a language
                   </div>
                   <select
                     name="language"
