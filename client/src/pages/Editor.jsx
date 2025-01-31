@@ -81,7 +81,6 @@ const Editor = () => {
         { headers: { token: localStorage.getItem("token") } }
       );
       toast.success("Project saved successfully");
-      getProject();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save project");
     }
@@ -101,10 +100,11 @@ const Editor = () => {
       );
       toast.success("Project name changed successfully", { autoClose: 2000 });
       setEdit(false);
-      setProjectName(projectName);
-      setSaveWait(false);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to edit project");
+    } finally {
+      setProjectName(projectName);
+      setSaveWait(false);
     }
   }, 500);
 
@@ -208,7 +208,8 @@ const Editor = () => {
         {/* Output Section */}
         <div className="md:w-1/2 h-full bg-gray-800">
           <div className="p-4 border-b border-gray-700 text-lg font-semibold flex gap-2 items-center">
-            Output <div className="hidden lg:inline">{`(Ctrl + s to save project)`}</div>
+            Output{" "}
+            <div className="hidden lg:inline">{`(Ctrl + s to save project)`}</div>
           </div>
           <div className="p-4 overflow-auto">
             {loading ? (
